@@ -7,6 +7,10 @@ from dotenv import load_dotenv
 from pathlib import Path
 import os
 from flask_cors import CORS
+from flask_migrate import Migrate
+from . import db  # or however you import your db
+
+migrate = Migrate()
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -32,6 +36,7 @@ def create_app():
     db.init_app(app)
     bcrypt.init_app(app)
     jwt.init_app(app)
+    migrate.init_app(app, db)
 
     api = Api(app)
 
