@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomNavbar from '../components/CustomNavbar';
 import { useDispatch } from 'react-redux';
 import { logoutSuccess } from '../store/authSlice';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-
-const GOOGLE_MAPS_API_KEY = 'AIzaSyB8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8'; // Inserted a sample API key, replace with your actual key if needed
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
