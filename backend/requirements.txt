@@ -1,0 +1,10 @@
+Flask
+Flask-RESTful
+Flask-JWT-Extended
+Flask-Migrate
+Flask-SQLAlchemy
+Flask-Bcrypt
+Flask-CORS
+psycopg2-binary
+python-dotenv
+alembic 
