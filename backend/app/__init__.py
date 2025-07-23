@@ -8,13 +8,11 @@ from pathlib import Path
 import os
 from flask_cors import CORS
 from flask_migrate import Migrate
-from . import db  # or however you import your db
-
-migrate = Migrate()
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 jwt = JWTManager()
+migrate = Migrate()
 
 def create_app():
     # Explicitly load .env file from inside the app factory
