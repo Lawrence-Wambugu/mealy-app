@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import CustomNavbar from '../components/CustomNavbar';
 import { useDispatch } from 'react-redux';
 import { logoutSuccess } from '../store/authSlice';
-// ...existing code...
 import styled from 'styled-components';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 const DashboardHeader = styled.div`
   display: flex;
@@ -132,29 +130,6 @@ const CancelButton = styled(EditButton)`
   &:hover { background: #a71d2a; }
 `;
 
-const FlexRow = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 2.5rem;
-  justify-content: center;
-  align-items: flex-start;
-  @media (max-width: 1100px) {
-    flex-direction: column;
-    gap: 2rem;
-    align-items: stretch;
-  }
-`;
-const Divider = styled.div`
-  width: 2px;
-  background: #f3e6d1;
-  height: 100%;
-  margin: 0 1.5rem;
-  border-radius: 2px;
-  @media (max-width: 1100px) {
-    display: none;
-  }
-`;
-
 
 const CatererDashboardPage = () => {
   const { token } = useSelector((state) => state.auth);
@@ -162,34 +137,6 @@ const CatererDashboardPage = () => {
   const handleLogout = () => {
     dispatch(logoutSuccess());
     window.location.href = '/login';
-  };
-  const [orders, setOrders] = useState([]);
-  const [ordersLoading, setOrdersLoading] = useState(true);
-  const [ordersError, setOrdersError] = useState(null);
-  React.useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/orders', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setOrders(response.data);
-      } catch (err) {
-        setOrdersError('Failed to fetch orders');
-      } finally {
-        setOrdersLoading(false);
-      }
-    };
-    if (token) fetchOrders();
-  }, [token]);
-  const handleMarkDelivered = async (orderId) => {
-    try {
-      await axios.put(`http://localhost:5000/orders/${orderId}/delivered`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setOrders(orders => orders.map(o => o.id === orderId ? { ...o, is_delivered: true } : o));
-    } catch (err) {
-      alert('Failed to update order status');
-    }
   };
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');

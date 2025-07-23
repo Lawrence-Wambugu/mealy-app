@@ -5,12 +5,10 @@ import { logoutSuccess } from '../store/authSlice';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { useJsApiLoader, Autocomplete } from '@react-google-maps/api';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyB8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8Qw8'; // Inserted a sample API key, replace with your actual key if needed
 
 const DashboardPage = () => {
-  const addressInputRef = useRef(null);
   const dispatch = useDispatch();
   const handleLogout = () => {
     dispatch(logoutSuccess());
@@ -25,11 +23,6 @@ const DashboardPage = () => {
   const [orderSuccess, setOrderSuccess] = useState(null);
   const { token } = useSelector((state) => state.auth);
   const [addressFields, setAddressFields] = useState({});
-
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-    libraries: ['places'],
-  });
 
   useEffect(() => {
     // Removed Google Maps Places Autocomplete integration

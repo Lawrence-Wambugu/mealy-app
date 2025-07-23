@@ -41,12 +41,6 @@ const NavBarContainer = styled.div`
   margin-bottom: 2rem;
 `;
 
-const Brand = styled.div`
-  color: #FFA500;
-  font-weight: bold;
-  font-size: 1.5rem;
-`;
-
 const NavButtons = styled.div`
   display: flex;
   gap: 1rem;

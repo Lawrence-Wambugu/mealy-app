@@ -22,61 +22,6 @@ const HomePageContainer = styled.div`
   color: var(--text-color);
 `;
 
-const HomeHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  margin-bottom: 2.5rem;
-  margin-top: 1.5rem;
-`;
-
-const LogoBrand = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
-`;
-
-const ImageSlider = styled.div`
-  width: 200%;
-  display: flex;
-  animation: ${scroll} 30s linear infinite;
-`;
-
-const ImageContainer = styled.div`
-  width: 16%;
-  height: 32vh;
-  background-image: url(${props => props.src});
-  background-size: cover;
-  background-position: center;
-  border-radius: 16px;
-  margin: 0 1rem;
-`;
-
-const InfoSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  border-radius: 16px;
-  box-shadow: none;
-  background: none;
-`;
-
-const Title = styled.h1`
-  font-size: 3rem;
-  color: var(--primary-color);
-  margin-bottom: 1rem;
-`;
-
-const Subtitle = styled.p`
-  font-size: 1.2rem;
-  max-width: 800px;
-  margin: 0 auto 2rem auto;
-  line-height: 1.6;
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
