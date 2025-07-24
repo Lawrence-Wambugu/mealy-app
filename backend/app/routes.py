@@ -248,6 +248,8 @@ class MealOptionList(Resource):
         price = data.get('price')
         image_url = data.get('image_url')
         sides = data.get('sides', [])
+        if isinstance(sides, list):
+            sides = ', '.join(sides)
 
         if not name:
             name = f"Meal{MealOption.query.count()+1}"
