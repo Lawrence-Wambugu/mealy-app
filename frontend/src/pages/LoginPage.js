@@ -42,7 +42,8 @@ const LoginPage = () => {
     try {
       const data = await authService.login(username, password);
       const decodedToken = jwtDecode(data.access_token);
-      const user = { username: decodedToken.sub.username, isAdmin: decodedToken.sub.is_admin };
+      const sub = JSON.parse(decodedToken.sub);
+      const user = { username: sub.username, isAdmin: sub.is_admin };
       
       dispatch(loginSuccess({ token: data.access_token, user }));
 
