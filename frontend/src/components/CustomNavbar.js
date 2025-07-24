@@ -30,7 +30,7 @@ const CustomNavbar = ({ type, onLogout }) => {
   );
 };
 
-// Styled Components     
+// Styled Components      
 const NavBarContainer = styled.div`
   display: flex;
   align-items: center;
