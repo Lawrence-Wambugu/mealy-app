@@ -20,7 +20,7 @@ def create_app():
     load_dotenv(dotenv_path=env_path)
 
     app = Flask(__name__)
-    CORS(app, origins=["https://mealy-app-vv22.onrender.com/"])
+    CORS(app, origins=["https://mealy-app-vv22.onrender.com"])
     # or to allow all origins (for testing only!): CORS(app)
     
     # Load configuration directly
