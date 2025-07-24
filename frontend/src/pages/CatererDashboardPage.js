@@ -173,7 +173,7 @@ const CatererDashboardPage = () => {
           description,
           price: parseFloat(price),
           image_url: imageUrl,
-          sides: sides.filter(side => side).join(', '), // Send as comma-separated string
+          sides: sides.filter(side => side), // Send as array
         },
         {
           headers: {
