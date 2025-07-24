@@ -20,7 +20,7 @@ const MealsPage = () => {
       }
     };
     fetchMeals();
-  }, []);
+  }, [API_URL]);
 
   if (loading) return <div>Loading meals...</div>;
   if (error) return <div>{error}</div>;
