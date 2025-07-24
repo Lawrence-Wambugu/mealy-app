@@ -13,6 +13,11 @@ Mealy is a full-stack web application that connects customers with local caterer
 - Mark orders as delivered
 - Responsive, modern UI for both customers and caterers
 - Admin/caterer and customer roles
+- Fully deployed and production-ready on Render
+
+## Production URLs
+- **Live Frontend:** [https://mealy-app-vv22.onrender.com](https://mealy-app-vv22.onrender.com)
+- **Live Backend API:** [https://mealy-app-ajxu.onrender.com](https://mealy-app-ajxu.onrender.com)
 
 ## Technologies & Frameworks Used
 - **Frontend:** React, styled-components, Axios
@@ -20,7 +25,7 @@ Mealy is a full-stack web application that connects customers with local caterer
 - **Database:** PostgreSQL
 - **ORM:** SQLAlchemy
 - **Migrations:** Alembic, Flask-Migrate
-- **Deployment:** Render (recommended)
+- **Deployment:** Render (monorepo, separate frontend and backend services)
 
 ## Team
 - **Laetitia Kamangu** (Scrum Master)
@@ -28,7 +33,7 @@ Mealy is a full-stack web application that connects customers with local caterer
 - **Andrew Tobiko** (Frontend Developer)
 - **George Mbugua** (Deployment & Documentation)
 
-## Installation
+## Local Installation
 
 ### Prerequisites
 - Node.js & npm (for frontend)
@@ -84,8 +89,47 @@ Mealy is a full-stack web application that connects customers with local caterer
 
 The frontend will run on [http://localhost:3000](http://localhost:3000) and the backend on [http://localhost:5000](http://localhost:5000) by default.
 
-## Deployment
-- The app is ready for deployment on Render or similar platforms. Ensure environment variables are set and the database is accessible from your deployment environment.
+## Deployment on Render
+
+### Monorepo Structure
+Both frontend and backend are in a single GitHub repository. Render is used to deploy each as a separate web service.
+
+### Backend Deployment Steps
+1. **Create a new Web Service** on Render for the backend.
+2. **Root Directory:** `backend`
+3. **Build Command:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. **Start Command:**
+   ```bash
+   flask db upgrade && python seed.py && gunicorn run:app
+   ```
+   (After initial deploy and seeding, you can use `flask db upgrade && gunicorn run:app`)
+5. **Environment Variables:**
+   - `SECRET_KEY`
+   - `DATABASE_URI` (use the Render PostgreSQL connection string)
+   - `JWT_SECRET_KEY`
+6. **Connect to a Render PostgreSQL database** and set the connection string as `DATABASE_URI`.
+
+### Frontend Deployment Steps
+1. **Create a new Web Service** on Render for the frontend.
+2. **Root Directory:** `frontend`
+3. **Build Command:**
+   ```bash
+   npm install && npm run build
+   ```
+4. **Start Command:**
+   ```bash
+   serve -s build
+   ```
+5. **Environment Variables:**
+   - `REACT_APP_API_URL=https://mealy-app-ajxu.onrender.com` (or your backend Render URL)
+
+### Notes
+- Ensure CORS is configured in the backend to allow requests from your frontend Render domain.
+- The backend and frontend communicate via the environment variable `REACT_APP_API_URL`.
+- All migrations and seeding should be run on the production database after deployment.
 
 ---
 
