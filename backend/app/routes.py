@@ -16,7 +16,7 @@ class MarkOrderDelivered(Resource):
         return self._mark_delivered(order_id)
 
     def _mark_delivered(self, order_id):
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         user = User.query.filter_by(username=current_user['username']).first()
         if not user or not user.is_admin:
             resp = make_response({'message': 'Admin access required'}, 403)
