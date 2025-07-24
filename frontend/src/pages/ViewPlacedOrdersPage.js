@@ -33,7 +33,8 @@ const ViewPlacedOrdersPage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/orders/customer', {
+        const API_URL = process.env.REACT_APP_API_URL || 'https://mealy-app-ajxu.onrender.com';
+        const response = await axios.get(`${API_URL}/orders/customer`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

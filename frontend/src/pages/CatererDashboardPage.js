@@ -165,8 +165,9 @@ const CatererDashboardPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const API_URL = process.env.REACT_APP_API_URL || 'https://mealy-app-ajxu.onrender.com';
       const response = await axios.post(
-        'http://localhost:5000/meals',
+        `${API_URL}/meals`,
         {
           name,
           description,
@@ -195,7 +196,8 @@ const CatererDashboardPage = () => {
   React.useEffect(() => {
     const fetchMeals = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/meals/mine', {
+        const API_URL = process.env.REACT_APP_API_URL || 'https://mealy-app-ajxu.onrender.com';
+        const response = await axios.get(`${API_URL}/meals/mine`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setMeals(response.data);
@@ -216,7 +218,8 @@ const CatererDashboardPage = () => {
   };
   const saveEdit = async (meal) => {
     try {
-      await axios.put(`http://localhost:5000/meals/${meal.id}`, {
+      const API_URL = process.env.REACT_APP_API_URL || 'https://mealy-app-ajxu.onrender.com';
+      await axios.put(`${API_URL}/meals/${meal.id}`, {
         price: parseFloat(editFields.price),
         description: editFields.description,
       }, {

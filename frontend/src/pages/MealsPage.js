@@ -6,10 +6,12 @@ const MealsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const API_URL = process.env.REACT_APP_API_URL || 'https://mealy-app-ajxu.onrender.com';
+
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/meals');
+        const response = await axios.get(`${API_URL}/meals`);
         setMeals(response.data);
       } catch (err) {
         setError('Failed to fetch meals');

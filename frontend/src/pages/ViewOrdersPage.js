@@ -74,7 +74,8 @@ const ViewOrdersPage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/orders', {
+        const API_URL = process.env.REACT_APP_API_URL || 'https://mealy-app-ajxu.onrender.com';
+        const response = await axios.get(`${API_URL}/orders`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -94,7 +95,8 @@ const ViewOrdersPage = () => {
 
   const handleMarkDelivered = async (orderId) => {
     try {
-      await axios.put(`http://localhost:5000/orders/${orderId}/delivered`, {}, {
+      const API_URL = process.env.REACT_APP_API_URL || 'https://mealy-app-ajxu.onrender.com';
+      await axios.put(`${API_URL}/orders/${orderId}/delivered`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(orders => orders.map(o => o.id === orderId ? { ...o, is_delivered: true } : o));

@@ -14,7 +14,8 @@ const CustomerOrdersPage = () => {
       setLoading(false);
       return;
     }
-    axios.get('http://localhost:5000/orders/customer', {
+    const API_URL = process.env.REACT_APP_API_URL || 'https://mealy-app-ajxu.onrender.com';
+    axios.get(`${API_URL}/orders/customer`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -28,7 +28,8 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/meals');
+        const API_URL = process.env.REACT_APP_API_URL || 'https://mealy-app-ajxu.onrender.com';
+        const response = await axios.get(`${API_URL}/meals`);
         setMeals(response.data);
       } catch (err) {
         setError('Failed to fetch meals');
@@ -76,7 +77,8 @@ const DashboardPage = () => {
     };
     console.log('Order payload:', payload);
     try {
-      await axios.post('http://localhost:5000/orders', payload, {
+      const API_URL = process.env.REACT_APP_API_URL || 'https://mealy-app-ajxu.onrender.com';
+      await axios.post(`${API_URL}/orders`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
