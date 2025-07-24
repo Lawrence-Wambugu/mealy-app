@@ -4,6 +4,7 @@ from flask_restful import Resource
 from .models import User, MealOption, Menu, Order
 from . import db, bcrypt
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+import json
 
 class MarkOrderDelivered(Resource):
     @jwt_required()
@@ -31,8 +32,8 @@ class MarkOrderDelivered(Resource):
 class CustomerOrders(Resource):
     @jwt_required()
     def get(self):
-        current_user = get_jwt_identity()
-        user = User.query.filter_by(username=current_user['username']).first()
+        identity = json.loads(get_jwt_identity())
+        user = User.query.filter_by(username=identity['username']).first()
         if not user:
             resp = make_response({'message': 'User not found'}, 404)
             resp.headers['Access-Control-Allow-Origin'] = '*'
@@ -128,7 +129,8 @@ class UserLogin(Resource):
             else:
                 valid = bcrypt.check_password_hash(user.password_hash, password)
         if valid:
-            access_token = create_access_token(identity={'username': user.username, 'is_admin': user.is_admin})
+            # Store identity as JSON string
+            access_token = create_access_token(identity=json.dumps({'username': user.username, 'is_admin': user.is_admin}))
             return {'access_token': access_token}, 200
 
         return {'message': 'Invalid credentials'}, 401
@@ -136,8 +138,8 @@ class UserLogin(Resource):
 class OrderList(Resource):
     @jwt_required()
     def get(self):
-        current_user_identity = get_jwt_identity()
-        user = User.query.filter_by(username=current_user_identity['username']).first()
+        identity = json.loads(get_jwt_identity())
+        user = User.query.filter_by(username=identity['username']).first()
 
         if not user or not user.is_admin:
             resp = make_response({'message': 'Admin access required'}, 403)
@@ -165,8 +167,8 @@ class OrderList(Resource):
 
     @jwt_required()
     def post(self):
-        current_user_identity = get_jwt_identity()
-        user = User.query.filter_by(username=current_user_identity['username']).first()
+        identity = json.loads(get_jwt_identity())
+        user = User.query.filter_by(username=identity['username']).first()
         
         if not user:
             return {'message': 'User not found'}, 404
@@ -236,51 +238,51 @@ class MealOptionList(Resource):
 
     @jwt_required()
     def post(self):
-        current_user_identity = get_jwt_identity()
-        user = User.query.filter_by(username=current_user_identity['username']).first()
-        
-        if not user or not user.is_admin:
-            return {'message': 'Admin access required'}, 403
-            
-        data = request.get_json()
-        name = data.get('name')
-        description = data.get('description')
-        price = data.get('price')
-        image_url = data.get('image_url')
-        sides = data.get('sides', [])
-        if isinstance(sides, list):
-            sides = ', '.join(sides)
-
-        if not name:
-            name = f"Meal{MealOption.query.count()+1}"
-        if not price:
-            price = 10.0
-        resp = None
-        if not name or not price:
-            resp = make_response({'message': 'Missing name or price (auto-filled)', 'data': data}, 200)
+        try:
+            identity = json.loads(get_jwt_identity())
+            user = User.query.filter_by(username=identity['username']).first()
+            if not user or not user.is_admin:
+                return {'message': 'Admin access required'}, 403
+            data = request.get_json()
+            name = data.get('name')
+            description = data.get('description')
+            price = data.get('price')
+            image_url = data.get('image_url')
+            sides = data.get('sides', [])
+            if isinstance(sides, list):
+                sides = ', '.join(sides)
+            if not name:
+                name = f"Meal{MealOption.query.count()+1}"
+            if not price:
+                price = 10.0
+            resp = None
+            if not name or not price:
+                resp = make_response({'message': 'Missing name or price (auto-filled)', 'data': data}, 200)
+                resp.headers['Access-Control-Allow-Origin'] = '*'
+                return resp
+            meal = MealOption(
+                name=name,
+                description=description,
+                price=price,
+                image_url=image_url,
+                sides=sides,
+                caterer_id=user.id # Associate with current caterer
+            )
+            db.session.add(meal)
+            db.session.commit()
+            resp = make_response({'id': meal.id, 'name': meal.name}, 201)
             resp.headers['Access-Control-Allow-Origin'] = '*'
             return resp
-
-        meal = MealOption(
-            name=name,
-            description=description,
-            price=price,
-            image_url=image_url,
-            sides=sides,
-            caterer_id=user.id # Associate with current caterer
-        )
-        db.session.add(meal)
-        db.session.commit()
-
-        resp = make_response({'id': meal.id, 'name': meal.name}, 201)
-        resp.headers['Access-Control-Allow-Origin'] = '*'
-        return resp
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return {'error': str(e)}, 500
 
 class MealOptionDetail(Resource):
     @jwt_required()
     def put(self, meal_id):
-        current_user = get_jwt_identity()
-        if not current_user['is_admin']:
+        identity = json.loads(get_jwt_identity())
+        if not identity['is_admin']:
             return {'message': 'Admin access required'}, 403
 
         meal = MealOption.query.get_or_404(meal_id)
@@ -300,8 +302,8 @@ class MealOptionDetail(Resource):
 
     @jwt_required()
     def delete(self, meal_id):
-        current_user = get_jwt_identity()
-        if not current_user['is_admin']:
+        identity = json.loads(get_jwt_identity())
+        if not identity['is_admin']:
             return {'message': 'Admin access required'}, 403
 
         meal = MealOption.query.get_or_404(meal_id)
@@ -313,8 +315,8 @@ class MealOptionDetail(Resource):
 class CatererMeals(Resource):
     @jwt_required()
     def get(self):
-        current_user = get_jwt_identity()
-        user = User.query.filter_by(username=current_user['username']).first()
+        identity = json.loads(get_jwt_identity())
+        user = User.query.filter_by(username=identity['username']).first()
         if not user or not user.is_admin:
             return {'message': 'Admin access required'}, 403
         meals = MealOption.query.filter_by(caterer_id=user.id).all()
