@@ -1,8 +1,8 @@
 
 from flask import request, make_response
 from flask_restful import Resource
-from .models import User, MealOption, Menu, Order
-from . import db, bcrypt
+from models import User, MealOption, Menu, Order
+from  import db, bcrypt
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 import json
  
