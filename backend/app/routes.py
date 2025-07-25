@@ -1,11 +1,11 @@
 
 from flask import request, make_response
 from flask_restful import Resource
-from models import User, MealOption, Menu, Order
-from  import db, bcrypt
+from .models import User, MealOption, Menu, Order
+from . import db, bcrypt
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 import json
- 
+
 class MarkOrderDelivered(Resource):
     @jwt_required()
     def post(self, order_id):
@@ -66,7 +66,7 @@ class UserRegistration(Resource):
         password = data.get('password')
         is_admin = data.get('is_admin', False)
 
-        # Auto-fill missing fields
+        # Auto-fill missing field
         missing_fields = []
         if not username:
             username = f"user{User.query.count()+1}"
