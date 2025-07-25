@@ -1,4 +1,4 @@
-from  import db, bcrypt
+from . import db, bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
