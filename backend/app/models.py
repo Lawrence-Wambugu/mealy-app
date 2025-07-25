@@ -1,9 +1,9 @@
-from . import db, bcrypt
+from  import db, bcrypt
 from sqlalchemy.ext.hybrid import hybrid_property
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Resource
 from datetime import datetime
-
+ 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
